@@ -1,0 +1,37 @@
+@host = https://localhost:7000
+
+### Получить токен оператора
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "operator",
+  "password": "operator123"
+}
+
+### Получить токен администратора
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Публичный CRUD-запрос
+GET {{host}}/api/stations
+
+### Сводный отчет: Station + Sensor + Measurement
+GET {{host}}/api/reports/latest-by-station
+Authorization: Bearer ВСТАВЬТЕ_ТОКЕН_ОПЕРАТОРА
+
+### Добавление станции: только Admin
+POST {{host}}/api/stations
+Authorization: Bearer ВСТАВЬТЕ_ТОКЕН_АДМИНИСТРАТОРА
+Content-Type: application/json
+
+{
+  "name": "Скважина 310",
+  "productionUnit": "Цех добычи №3",
+  "location": "Северная кустовая площадка"
+}

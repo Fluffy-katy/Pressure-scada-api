@@ -1,0 +1,86 @@
+{
+  "info": {
+    "name": "Pressure SCADA API",
+    "_postman_id": "7f95c0d6-7a5f-4d8d-b1c8-pressure-scada",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5088" },
+    { "key": "operatorToken", "value": "" },
+    { "key": "adminToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login operator",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"operator\",\n  \"password\": \"operator123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CRUD",
+      "item": [
+        { "name": "List stations", "request": { "method": "GET", "url": "{{baseUrl}}/api/stations" } },
+        { "name": "List sensors", "request": { "method": "GET", "url": "{{baseUrl}}/api/sensors" } },
+        { "name": "List measurements", "request": { "method": "GET", "url": "{{baseUrl}}/api/measurements" } },
+        {
+          "name": "Create station (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Скважина 310\",\n  \"productionUnit\": \"Цех добычи №3\",\n  \"location\": \"Северная кустовая площадка\"\n}" },
+            "url": "{{baseUrl}}/api/stations"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports (authorized)",
+      "item": [
+        {
+          "name": "Latest pressure by station",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{operatorToken}}" }],
+            "url": "{{baseUrl}}/api/reports/latest-by-station"
+          }
+        },
+        {
+          "name": "Sensor statistics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{operatorToken}}" }],
+            "url": "{{baseUrl}}/api/reports/sensor-statistics"
+          }
+        },
+        {
+          "name": "Pressure alerts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{operatorToken}}" }],
+            "url": "{{baseUrl}}/api/reports/alerts?threshold=180"
+          }
+        }
+      ]
+    }
+  ]
+}
